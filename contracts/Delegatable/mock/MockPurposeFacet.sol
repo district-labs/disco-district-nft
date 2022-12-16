@@ -5,18 +5,18 @@ import "../Delegatable.sol";
 import "../diamond/libraries/LibDiamond.sol";
 
 struct AppStorage {
-    string purpose;
+  string purpose;
 }
 
 contract MockPurposeFacet {
-    AppStorage internal s;
+  AppStorage internal s;
 
-    function purpose() public view returns (string memory) {
-        return s.purpose;
-    }
+  function purpose() public view returns (string memory) {
+    return s.purpose;
+  }
 
-    function setPurpose(string memory purpose_) public {
-        LibDiamond.enforceIsContractOwner();
-        s.purpose = purpose_;
-    }
+  function setPurpose(string memory purpose_) public {
+    LibDiamond.enforceIsContractOwner();
+    s.purpose = purpose_;
+  }
 }

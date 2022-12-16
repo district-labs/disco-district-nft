@@ -5,33 +5,30 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../Delegatable.sol";
 
 contract MockDelegatable is Delegatable, Ownable {
-    string public purpose = "What is my purpose?";
+  string public purpose = "What is my purpose?";
 
-    constructor(string memory contractName) Delegatable(contractName, "1") {}
+  constructor(string memory contractName) Delegatable(contractName, "1") {}
 
-    function setPurpose(string memory purpose_) public onlyOwner {
-        purpose = purpose_;
+  function setPurpose(string memory purpose_) public onlyOwner {
+    purpose = purpose_;
+  }
+
+  function _msgSender()
+    internal
+    view
+    virtual
+    override(DelegatableCore, Context)
+    returns (address sender)
+  {
+    if (msg.sender == address(this)) {
+      bytes memory array = msg.data;
+      uint256 index = msg.data.length;
+      assembly {
+        sender := and(mload(add(array, index)), 0xffffffffffffffffffffffffffffffffffffffff)
+      }
+    } else {
+      sender = msg.sender;
     }
-
-    function _msgSender()
-        internal
-        view
-        virtual
-        override(DelegatableCore, Context)
-        returns (address sender)
-    {
-        if (msg.sender == address(this)) {
-            bytes memory array = msg.data;
-            uint256 index = msg.data.length;
-            assembly {
-                sender := and(
-                    mload(add(array, index)),
-                    0xffffffffffffffffffffffffffffffffffffffff
-                )
-            }
-        } else {
-            sender = msg.sender;
-        }
-        return sender;
-    }
+    return sender;
+  }
 }
