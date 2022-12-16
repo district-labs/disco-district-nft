@@ -1,4 +1,4 @@
-# Smart Contracts Boilerplate for Hardhat
+# Disco District JITAccessControl NFT
 
 ![Test](https://github.com/turbo-eth/template-hardhat-sol/actions/workflows/test.yml/badge.svg)
 ![Coverage](https://github.com/turbo-eth/template-hardhat-sol/actions/workflows/coverage.yml/badge.svg)
