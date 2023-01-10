@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
-import "hardhat/console.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
-import { Ownable, Context } from "@openzeppelin/contracts/access/Ownable.sol";
+import { Context } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Delegatable, DelegatableCore } from "./Delegatable/Delegatable.sol";
 
 interface IERC721Mintable {
@@ -12,15 +11,15 @@ interface IERC721Mintable {
   function burn(uint256 tokenId) external;
 }
 
-contract DelegatableERC721Controller is Ownable, AccessControl, Delegatable {
+contract DelegatableERC721Controller is AccessControl, Delegatable {
   address public erc721TokenAddress;
   bytes32 public constant CONTROLLER_ROLE = keccak256("CONTROLLER_ROLE");
 
-  constructor(address _erc721TokenAddress, address admin)
+  constructor(address _erc721TokenAddress, address admin, address controller)
     Delegatable("DelegatableERC721Controller", "1")
   {
-    _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    _setupRole(CONTROLLER_ROLE, admin);
+    _setupRole(DEFAULT_ADMIN_ROLE, admin);
+    _setupRole(CONTROLLER_ROLE, controller);
     erc721TokenAddress = _erc721TokenAddress;
   }
 
@@ -29,22 +28,28 @@ contract DelegatableERC721Controller is Ownable, AccessControl, Delegatable {
   /* ===================================================================================== */
 
   function controllerMint(address account) external virtual {
-    console.log(_msgSender(), "SENDER");
-    require(hasRole(CONTROLLER_ROLE, _msgSender()), "ImpactCardOracle:unauthorized");
+    require(hasRole(CONTROLLER_ROLE, _msgSender()), "DelegatableERC721Controller:unauthorized");
     IERC721Mintable(erc721TokenAddress).mint(account);
   }
 
   function controllerBurn(uint256 tokenId) external virtual {
-    require(hasRole(CONTROLLER_ROLE, _msgSender()), "ImpactCardOracle:unauthorized");
+    require(hasRole(CONTROLLER_ROLE, _msgSender()), "DelegatableERC721Controller:unauthorized");
     IERC721Mintable(erc721TokenAddress).burn(tokenId);
   }
 
-  function grantMinterRole(address _minter) external virtual onlyOwner {
+  function grantMinterRole(address _minter) external virtual {
+    require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DelegatableERC721Controller:unauthorized");
     grantRole(CONTROLLER_ROLE, _minter);
   }
 
-  function revokeMinter(address _minter) external virtual onlyOwner {
+  function revokeMinter(address _minter) external virtual {
+    require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DelegatableERC721Controller:unauthorized");
     revokeRole(CONTROLLER_ROLE, _minter);
+  }
+
+  function transferAdmin(address account) external {
+    grantRole(DEFAULT_ADMIN_ROLE, account);
+    renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   /* ===================================================================================== */

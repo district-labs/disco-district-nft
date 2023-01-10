@@ -76,7 +76,7 @@ if (MAINNET_PK_DEPLOYER && ETHEREUM_MAINNET_RPC_URL) {
 }
 
 if (TESTNET_PK_DEPLOYER && ETHEREUM_GOERLI_RPC_URL) {
-  networks.ethereumTestnet = {
+  networks.testnet = {
     url: ETHEREUM_GOERLI_RPC_URL,
     accounts: [TESTNET_PK_DEPLOYER],
   };
@@ -85,7 +85,7 @@ if (TESTNET_PK_DEPLOYER && ETHEREUM_GOERLI_RPC_URL) {
 /**
  * Optimism
  * @mainnet: 10
- * @testnet: 42
+ * @testnet: 420
  */
 if (MAINNET_PK_DEPLOYER && OPTIMISM_MAINNET_RPC_URL) {
   networks.optimism = {

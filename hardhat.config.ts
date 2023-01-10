@@ -43,6 +43,12 @@ const config: HardhatUserConfig = {
     timeout: 30000,
   },
   namedAccounts: {
+    minter: {
+      default: '0x533E243d0A222f3A007A6751d321e83669eb6f5D',
+    },
+    administrator: {
+      default: '0x761d584f1C2d43cBc3F42ECd739701a36dFFAa31', // kames.eth
+    },
     deployer: {
       default: 0,
     },

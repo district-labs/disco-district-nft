@@ -18,12 +18,39 @@ describe('DiscoERC721', () => {
   });
 
   beforeEach(async () => {
+    const name =' Funk Town'
+    const symbol = 'FUNK'
+    const baseURI = 'https://ipfs.io/ipfs/QmZexWfWGZWCmsbY2FUp8N8CvSZeYRu3ucJ74wWX18AZip/'
+    const numberOfImages = 75
+
+    const contactInformation = {
+      name: "Funk Town NFT",
+      description: "Get on the Dance Floor",
+      image: "",
+      externalLink: "https://disco.xyz",
+      sellerFeeBasisPoints: "0",
+      feeRecipient: "0x0000000000000000000000000000000000000000",
+    };
+
+    DiscoERC721 = await DiscoERC721Factory.deploy(name,
+        symbol,
+        baseURI,
+        contactInformation,
+        wallet0.address,
+        numberOfImages
+        );
+
+        DiscoERC721.grantMinterBurnerRole()
 
   });
 
-  describe('a situtation', () => {
+  describe('mint(address to)', () => {
     it('should SUCCEED to mint', async () => {
-      expect(true).to.be.true;
+      await DiscoERC721.mint(wallet0.address);
+      const owner = await DiscoERC721.ownerOf(1);
+      const totalSupply = await DiscoERC721.totalSupply();
+      expect(owner).to.equal(wallet0.address);
+      expect(totalSupply).to.equal(1);
     });
   });
 });
