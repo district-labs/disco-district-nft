@@ -15,9 +15,11 @@ contract DelegatableERC721Controller is AccessControl, Delegatable {
   address public erc721TokenAddress;
   bytes32 public constant CONTROLLER_ROLE = keccak256("CONTROLLER_ROLE");
 
-  constructor(address _erc721TokenAddress, address admin, address controller)
-    Delegatable("DelegatableERC721Controller", "1")
-  {
+  constructor(
+    address _erc721TokenAddress,
+    address admin,
+    address controller
+  ) Delegatable("DelegatableERC721Controller", "1") {
     _setupRole(DEFAULT_ADMIN_ROLE, admin);
     _setupRole(CONTROLLER_ROLE, controller);
     erc721TokenAddress = _erc721TokenAddress;

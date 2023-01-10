@@ -77,7 +77,6 @@ contract MintableERC721 is ERC721 {
     return super.supportsInterface(interfaceId);
   }
 
-
   function contractURI() external view returns (string memory uri) {
     return
       string(
@@ -122,7 +121,7 @@ contract MintableERC721 is ERC721 {
   /* Internal Functions                                                                    */
   /* ===================================================================================== */
 
-//   function _baseURI() internal view virtual override returns (string memory) {
-//     return _baseTokenURI;
-//   }
+  //   function _baseURI() internal view virtual override returns (string memory) {
+  //     return _baseTokenURI;
+  //   }
 }
